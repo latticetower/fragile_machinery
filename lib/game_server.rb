@@ -8,14 +8,18 @@ class GameServer
   #TODO: if hash - should use unique connection identifier as a key
   
   def initialize
-    @users = Array.new
+    @users = Hash.new
     @games = Array.new
   end
   
   # api for communicating with event_machine classes
-  def add_user(user)
-    @users ||= []
-    @users << user 
+  def add_user(name, user)
+    @users ||= {}
+    @users[name] = user 
+  end
+  
+  def user_list
+    @users.keys.join ','
   end
   
   # method creates game for users specified and pushes is to @games array

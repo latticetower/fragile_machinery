@@ -10,6 +10,7 @@ class Deck
     @cards = Array.new
   end
   
-  def shuffle
+  def shuffle!
+    @cards.shuffle!
   end
 end
