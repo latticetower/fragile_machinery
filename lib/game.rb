@@ -2,6 +2,13 @@ require 'state_machine'
 class Game
   attr_protected :first_player, :second_player
   
+  state_machine :state, :initial => :created do
+    state :created, :value => 0
+    state :ready, :value => 1
+    state :started, :value => 2
+    state :finished, :value => 3
+  end
+  
   state_machine :phase, :initial => :undefined, :namespace => 'phase' do
     event :fight do
       transition all => :combat

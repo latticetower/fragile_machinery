@@ -9,7 +9,7 @@ class GameServer
   
   def initialize
     @users = Hash.new
-    @games = Array.new
+    @games = Hash.new
   end
   
   # api for communicating with event_machine classes
@@ -24,6 +24,17 @@ class GameServer
   
   # method creates game for users specified and pushes is to @games array
   def create_game(user1, user2)
-    @games << Game.new(user1, user2)
+    @games[[user1, user2].to_sym] = Game.new(user1, user2)
+  end
+  
+  def game_ready(user1, user2)
+    @games[[user1, user2].to_sym].ready!
+  end
+  def game_reject(user1, user2)
+    @games[[user1, user2].to_sym] = nil
+  end
+  
+  def change_state(new_state)
+    @games[[user1, user2].to_sym].ready!
   end
 end
