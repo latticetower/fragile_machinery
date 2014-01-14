@@ -1,5 +1,7 @@
 require 'state_machine'
 class Game
+  attr_protected :first_player, :second_player
+  
   state_machine :phase, :initial => :undefined, :namespace => 'phase' do
     event :fight do
       transition all => :combat
@@ -21,5 +23,6 @@ class Game
   #game can be created only when there are two users in it
   def initialize(user1, user2)
     super() # NOTE: This *must* be called, otherwise states won't get initialized
+    @first_player, @second_player = user1, user2
   end
 end
