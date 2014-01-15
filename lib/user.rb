@@ -1,3 +1,5 @@
+require 'state_machine'
+
 class User
   attr_accessor :name
   attr_reader :is_busy

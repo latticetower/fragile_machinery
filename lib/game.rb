@@ -1,4 +1,5 @@
 require 'state_machine'
+
 class Game
   @first_player = nil
   @second_player = nil
