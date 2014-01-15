@@ -12,9 +12,9 @@
 
 Диаграмма состояний: 
 
-image:images\User_state.svg["User states diagram",width=200]
+image:images/User_state.svg["User states diagram",width=200]
 
 === Игра (класс Game)
 Диаграмма состояний:
 
-image:images\Game_state.svg["Game states diagram", width=300, link="images\Game_state.svg"]
+image:images/Game_state.svg["Game states diagram", width=300, link="images/Game_state.svg"]
