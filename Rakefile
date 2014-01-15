@@ -2,6 +2,7 @@
 
 require 'rake'
 require 'rake/testtask'
+require 'tasks/state_machine'
 
 desc 'Default: run all tests.'
 task :default => :test
