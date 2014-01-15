@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require '../lib/deck.rb'
+require File.dirname(__FILE__) + '/../lib/deck.rb'
 
 describe "Deck", "Deck primitive test" do
   describe "new method call" do

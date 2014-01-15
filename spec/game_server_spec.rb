@@ -1,6 +1,6 @@
 require 'minitest/autorun'
-require '../lib/game_server.rb'
-require '../lib/user.rb'
+require File.dirname(__FILE__) + '/../lib/game_server.rb'
+require File.dirname(__FILE__) + '/../lib/user.rb'
 
 describe "GameServer", "GameServer primitive test" do
   describe "new method call" do
@@ -22,6 +22,6 @@ describe "GameServer", "GameServer primitive test" do
       gs.disconnect("n1")
       gs.users.size.must_equal 0
     end
-    
   end
+  
 end

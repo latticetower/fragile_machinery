@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require '../lib/hand.rb'
+require File.dirname(__FILE__) + '/../lib/hand.rb'
 
 describe "Hand", "Hand primitive test" do
   describe "new method call" do

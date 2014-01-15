@@ -4,7 +4,8 @@ class Player
               :supply_count
   
   attr_reader :board
-  attr_protected :hand, :deck
+  @hand = nil
+  @deck = nil
   
   def initialize
     @prod_count = 0 # let's suppose these values are zeroes at this point

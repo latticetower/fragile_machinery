@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require '../game.rb'
+require File.dirname(__FILE__) + '/../lib/player.rb'
 
 describe "Player", "Player primitive test" do
   describe "new method call" do

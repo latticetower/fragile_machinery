@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require '../lib/board.rb'
+require File.dirname(__FILE__) + '/../lib/board.rb'
 
 describe "Board", "Board primitive test" do
   describe "new method call" do
