@@ -9,13 +9,13 @@ class GameServer
   
   def initialize
     @users = Hash.new
-    @games = Hash.new
+    @games = Array.new
   end
   
   # api for communicating with event_machine classes
-  def add_user(name, user)
+  def add_user(user)
     @users ||= {}
-    @users[name] = user 
+    @users[user.name] = user 
   end
   
   def user_list
@@ -24,17 +24,29 @@ class GameServer
   
   # method creates game for users specified and pushes is to @games array
   def create_game(user1, user2)
-    @games[[user1, user2].to_sym] = Game.new(user1, user2)
+    @games << Game.new(user1, user2)
   end
   
   def game_ready(user1, user2)
-    @games[[user1, user2].to_sym].ready!
+    @games.select{ |game| game.played_by?(user1, user2) }.map{|game| game.ready!}
+    #TODO: should add method to game to return users
   end
   def game_reject(user1, user2)
-    @games[[user1, user2].to_sym] = nil
+    @games.delete_if{ |game| game.played_by?(user1, user2) }
   end
   
   def change_state(new_state)
-    @games[[user1, user2].to_sym].ready!
+    @games.select{ |game| game.played_by?(user1, user2) }.map{|game| game.ready!}
+  end
+  
+  def disconnect_all
+    @users.clear
+    @games.clear
+  end
+  
+  def disconnect(username)
+    @users.delete(username)
+    @games.select{ |game| game.played_by?(username) }.map{|game| game.finish!}
+    #TODO: should also find all games with this user and finish them all
   end
 end

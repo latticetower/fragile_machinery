@@ -43,6 +43,11 @@ require './lib/user.rb'
         @@connections[@username] = self
       end
     end
+    def unbind
+      @@connections.delete(self.username)
+      @@game_server.remove_user(username)
+      puts "#{self.username} is out"
+    end
   end
 
   EventMachine::run {

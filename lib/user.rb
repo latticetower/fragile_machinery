@@ -1,9 +1,9 @@
 class User
-  attr_accessor :username
+  attr_accessor :name
   attr_reader :is_busy
 
   def initialize(name)
-    @username = name
+    @name = name
   end
   
   def busy?
