@@ -1,8 +1,9 @@
 require 'state_machine'
 
 class Game
-  @first_player = nil
-  @second_player = nil
+  @first_player = nil #stores Player object with the same name as user has
+  @second_player = nil #this stores Player too
+  
   def users
     [ @first_player, @second_player ]
   end
@@ -41,12 +42,24 @@ class Game
         true
       end
     end
+    state :ready do
+      def prepare_cards
+        # should do nothing if we are in different states
+        @first_player.load_deck
+        @first_player.shuffle_deck!
+        @first_player.take_from_deck(5)
+        
+        @second_player.load_deck
+        @second_player.shuffle_deck!
+        @second_player.take_from_deck(5)
+      end
+    end
   end
 
   #game can be created only when there are two users in it
   def initialize(user1, user2)
     super() # NOTE: This *must* be called, otherwise states won't get initialized
-    @first_player, @second_player = user1, user2
+    @first_player, @second_player = Player.new(user1), Player.new(user2)
   end
   #checks if user plays this game
   def played_by?(username)
@@ -61,5 +74,15 @@ class Game
   def finish!
     #should finish the game and pick one winner
   end
+  
+  # method checks if user with specified name is in game. if he is, do state transition
+  # does nothing otherwise
+  def confirmed_by(username)
+    self.confirm1 if @first_player.name == username
+    self.confirm2 if @second_player.name == username
+  end
+  
+
+  
   
 end
