@@ -7,20 +7,20 @@ class Game
   end
   
   state_machine :initial => :created do
-    state :created, :value => 0
+    state :created
     state :first_confirmed
     state :second_confirmed
-    state :ready, :value => 1
-    state :started, :value => 2
+    state :ready
+    state :started
     
-      state :combat, :value => 4
+      state :combat
       state :first_moved
       state :second_moved
-      state :gain, :value => 5
-      state :deal, :value => 6
+      state :gain
+      state :deal
       
       
-    state :finished, :value => 3
+    state :finished
     
     # transitions
     transition :created => :first_confirmed, :second_confirmed => :ready, :on => :confirm1
@@ -33,6 +33,13 @@ class Game
     transition :gain => :deal, :on => :deal_cards
     transition :gain => :combat, :on => :next_move
     transition all - [:finished] => :finished, :on => :stop
+    
+    #state specific methods
+    state :combat, :first_moved, :second_moved, :gain, :deal do
+      def playable?
+        true
+      end
+    end
   end
 
   #game can be created only when there are two users in it

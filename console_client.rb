@@ -63,6 +63,9 @@ class ConsoleCmdInputHandler < EM::Connection
          " u list - print all users in game with their states (busy or not)",
          " u game <username> - ask for game session with user <username>",
          "In game mode:", #i'll write them later
+         " my hand - gets cards list (in hand)",
+         " show board - shows my board and opponent's board",
+         " move <card number> - puts card to board"
          "------------------------------------"
   end
 end

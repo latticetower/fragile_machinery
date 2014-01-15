@@ -11,7 +11,10 @@ describe "Game", "Game primitive test" do
   end
   
   describe "game stages" do
-    it "should be in unready state when created"
+    it "should be in created state when created" do
+      game = Game.new("p1", "p2")
+      game.state_name.must_equal :created
+    end
     describe "main gameplay" do
       it "should be playable only after ready state"
       it "should allow players to move one after another"
