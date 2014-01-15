@@ -15,8 +15,26 @@ describe "Game", "Game primitive test" do
       game = Game.new("p1", "p2")
       game.state_name.must_equal :created
     end
+    it "changes state when some user in current game confirms it" do
+      g = Game.new("p1", "p2")
+      g.confirmed_by("m1")
+      g.state_name.must_equal :created
+      g.confirmed_by("p1")
+      g.state_name.must_equal :first_confirmed
+      g.confirmed_by "m2"
+      g.state_name.must_equal :first_confirmed
+      g.confirmed_by "p2"
+      g.state_name.must_equal :ready
+    end
     describe "main gameplay" do
-      it "should be playable only after ready state"
+      it "should be playable only after ready state" do
+        g = Game.new("p1", "p2")
+        g.confirm1
+        g.confirm2
+        if g.ready?
+          g.prepare_cards
+        end
+      end
       it "should allow players to move one after another"
       it ""
     end
