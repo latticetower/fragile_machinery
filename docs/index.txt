@@ -1,0 +1,20 @@
+﻿Описание
+========
+:Version: 0.1
+
+== Основные объекты
+=== Игровой сервер (класс GameServer)
+- осуществляет непосредственное управление играми
+- хранит пользователей
+
+=== Пользователь (класс User)
+- взаимодействует непосредственно с игровым сервером
+
+Диаграмма состояний: 
+
+image:images\User_state.svg["User states diagram",width=200]
+
+=== Игра (класс Game)
+Диаграмма состояний:
+
+image:images\Game_state.svg["Game states diagram", width=300, link="images\Game_state.svg"]
