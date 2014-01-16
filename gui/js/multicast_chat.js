@@ -20,7 +20,7 @@ function testWebSocket() {
 }  
 function onOpen(evt) { 
   writeToScreen("CONNECTED"); 
-  doSend("WebSocket rocks"); 
+  //doSend("WebSocket rocks"); 
 }  
 function onClose(evt) { 
   writeToScreen("DISCONNECTED"); 

@@ -24,7 +24,7 @@ EM.run {
 
     ws.onmessage { |msg|
       puts "Recieved message: #{msg}"
-      ws.send "Pong: #{msg}"
+      ws.send "#{msg}"
     }
   end
 }
