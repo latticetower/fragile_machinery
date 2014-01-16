@@ -6,13 +6,13 @@ chat_port = 8080
 chat_host = ARGV[0] if ARGV.size > 0
 chat_port = ARGV[1].to_i if ARGV.size > 1
 
+@@connections = []
+
 EM.run {
   EM::WebSocket.run(:host => chat_host, :port => chat_port) do |ws|
     ws.onopen { |handshake|
       puts "Someone opened WebSocket connection"
-      puts handshake
-      puts self
-      puts ws
+      @@connections << ws
       # Access properties on the EM::WebSocket::Handshake object, e.g.
       # path, query_string, origin, headers
 
@@ -24,7 +24,10 @@ EM.run {
 
     ws.onmessage { |msg|
       puts "Recieved message: #{msg}"
-      ws.send "#{msg}"
+      @@connections.each do |connection|
+        connection.send "#{msg}"
+      end
+      # ws.send "#{msg}"
     }
   end
 }
