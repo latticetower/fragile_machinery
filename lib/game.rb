@@ -33,7 +33,7 @@ class Game
     transition :combat => :first_moved, :second_moved => :gain, :on => :action1
     transition :combat => :second_moved, :first_moved => :gain, :on => :action2
     transition :gain => :deal, :on => :deal_cards
-    transition :gain => :combat, :on => :next_move
+    transition :deal => :combat, :on => :next_move
     transition all - [:finished] => :finished, :on => :stop
     
     #state specific methods
@@ -42,6 +42,27 @@ class Game
         true
       end
     end
+    state :combat do
+      def can_move?(username)
+        played_by?(username)
+      end
+    end
+    state :first_moved do
+      def can_move?(username)
+        @second_player.name == username
+      end
+    end
+    state :second_moved do
+      def can_move?(username)
+        @first_player.name == username
+      end
+    end
+    state all - [:combat, :first_moved, :second_moved] do
+      def can_move?
+        false
+      end
+    end
+    
     state :ready do
       def prepare_cards
         # should do nothing if we are in different states
@@ -51,8 +72,15 @@ class Game
         
         @second_player.load_deck
         @second_player.shuffle_deck!
-        @second_player.take_from_deck(5)
+        @second_player.take_from_deck(4)
       end
+    end
+    
+    after_transition :gain => :deal do
+      @first_player.take_from_deck(1)
+      @second_player.take_from_deck(1)
+      # TODO: should ask Illionel if game ends when cards are over for both players
+      next_move #and should call next_move conditionally
     end
   end
 
@@ -83,6 +111,4 @@ class Game
   end
   
 
-  
-  
 end

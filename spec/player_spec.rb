@@ -10,17 +10,27 @@ describe "Player", "Player primitive test" do
   describe "deck object" do
     describe "loading" do
       it "should be empty initially" do
-        p = Player.new("p1")
-        p.deck_size
+        player = Player.new("p1")
+        player.deck_size
       end
+      
       it "should not be empty after calling load method" do
-        p = Player.new("p1")
-        p.deck_size.must_equal 0
-        p.load_deck
-        p.deck_size.wont_equal 0
+        player = Player.new("p1")
+        player.deck_size.must_equal 0
+        player.load_deck
+        player.deck_size.wont_equal 0
         #@first_player.shuffle_deck!
         #@first_player.take_from_deck(5)
       end
+      it "should take_from_deck upto deck_size cards" do
+        player = Player.new("p1")
+        player.load_deck
+        size = player.deck_size
+        player.take_from_deck(size + 1).must_equal size
+        # let's try to get more cards
+        player.take_from_deck(1).must_equal 0
+      end
+      
     end
   end
 end

@@ -20,6 +20,7 @@ class Player
   def hand_size
     @hand.size
   end
+
   def deck_size
     @deck.size
   end
@@ -33,15 +34,27 @@ class Player
         @deck = []
       end
     end
-    
-    
   end
+  
   # method should shuffle player's deck
   def shuffle_deck!
     @deck.shuffle
     @deck_position = @deck.each
   end
+  
+  # let's be more informative - let's return number of cards taken from deck successfully
   def take_from_deck(number_of_cards)
-    @hand << @deck_position.take(number_of_cards)
+    @deck_position ||= @deck.each
+    cards_taken = 0
+    # @hand += @deck_position.take(number_of_cards)
+    begin
+      number_of_cards.times do |i| 
+        @hand << @deck_position.next 
+        cards_taken += 1
+      end
+    rescue StopIteration => e
+      # not good, i know, but there is nothing to do here
+    end
+    cards_taken
   end
 end
