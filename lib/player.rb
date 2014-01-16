@@ -4,10 +4,11 @@ class Player
               :supply_count
   
   attr_reader :board
-  @hand 
+  attr_reader :hand 
   @deck # enumerator?
   @deck_position
   attr_reader :name
+  
   
   def initialize(name)
     @prod_count = 0 # let's suppose these values are zeroes at this point
@@ -56,5 +57,14 @@ class Player
       # not good, i know, but there is nothing to do here
     end
     cards_taken
+  end
+  
+  def board_cards
+    board.board_cards
+  end
+  
+  def take_from_hand(card_id)
+    # TODO: remove from hand card from given position
+    # move it to the board
   end
 end

@@ -68,11 +68,11 @@ class Game
         # should do nothing if we are in different states
         @first_player.load_deck
         @first_player.shuffle_deck!
-        @first_player.take_from_deck(5)
+        @first_player.take_from_deck(4)
         
         @second_player.load_deck
         @second_player.shuffle_deck!
-        @second_player.take_from_deck(4)
+        @second_player.take_from_deck(5)
       end
     end
     
@@ -108,6 +108,25 @@ class Game
   def confirmed_by(username)
     self.confirm1 if @first_player.name == username
     self.confirm2 if @second_player.name == username
+  end
+  
+  # method updates stats of board cards in gain state
+  def update_stats
+    # 1. update all board cards lifetime
+    @first_player.board_cards.each {|bc| bc.inc_lifetime }
+    @second_player.board_cards.each {|bc| bc.inc_lifetime }
+    #TODO: 2. should also change board state somehow
+  end
+  # method is called when we need to update cards state for specified user. 
+  # i.e., act with all units wich have target and didn't acted yet in this move
+  # for now it's just a method stub - i need to ask Illionel for exact game rules
+  def update_board_state(username)
+  
+  end
+  # method is called by game server when user tries to put his card on board
+  # 
+  def handle_action(username, actiontype)
+  
   end
   
 

@@ -36,7 +36,6 @@ describe "Game", "Game primitive test" do
         end
       end
       it "should allow players to move one after another"
-      it ""
     end
     describe "finishing" do
       it "should allow to finish game from any stage"
