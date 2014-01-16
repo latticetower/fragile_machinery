@@ -1,9 +1,12 @@
 class Card
+  BASIC_LIFETIME = 3
   attr_reader :name
   @@subclasses = []
+  
   def initialize(name)
     @name = name
   end
+  
   def self.inherited(subclass)
     @@subclasses << subclass
   end
@@ -20,24 +23,5 @@ class Card
       end
       s
     end
-  end
-end
-
-class Unit < Card
-  attr_reader :prod_cost, :supply_cost, 
-      :health, :shield, :attack
-  def initialize(name)
-    super(name)
-  end
-end
-
-module Effect
-end
-
-class Spell < Card
-  include Effect
-  
-  def initialize(name)
-    super(name)
   end
 end
