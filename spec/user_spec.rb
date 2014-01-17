@@ -13,4 +13,9 @@ describe "User", "User primitive test" do
       user.to_json
     end
   end
+  describe "methods list" do
+    it "has method for hand" do
+      User.new("user").must_respond_to :hand
+    end
+  end
 end

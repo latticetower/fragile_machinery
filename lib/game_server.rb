@@ -2,6 +2,9 @@
 Almost God class - rules everything
 stores information about open games & users
 =end
+
+require File.dirname(__FILE__) + '/game.rb'
+
 class GameServer
   attr_reader :users # stores array or hash of all server users
   attr_reader :games # stores array of all open games
@@ -32,20 +35,31 @@ class GameServer
   end
   
   # method creates game for users specified and pushes is to @games array
-  def create_game(user1, user2)
-    @games << Game.new(user1, user2)
+  def create_game(user_id1, user_id2)
+    g = Game.new(user_id1, user_id2)
+    g.on_game_start(user_id1, user_id2) do |player1, player2|
+      puts "game started"
+      @users[user_id1].player = player1
+      @users[user_id2].player = player2
+    end
+    g.on_game_end do
+      puts "game ended"
+      @users[user_id1].set_free
+      @users[user_id2].set_free
+    end
+    @games << g 
   end
-  
-  def game_ready(user1, user2)
-    @games.select{ |game| game.played_by?(user1, user2) }.map{|game| game.ready!}
+
+  def game_ready(user_id1, user_id2)
+    @games.select{ |game| game.played_by_users?(user_id1, user_id2) }.map{|game| game.set_ready!}
     #TODO: should add method to game to return users
   end
   def game_reject(user1, user2)
-    @games.delete_if{ |game| game.played_by?(user1, user2) }
+    @games.delete_if{ |game| game.played_by_users?(user1, user2) }
   end
   
   def change_state(new_state)
-    @games.select{ |game| game.played_by?(user1, user2) }.map{|game| game.ready!}
+    @games.select{ |game| game.played_by_users?(user1, user2) }.map{|game| game.ready!}
   end
   
   def disconnect_all
@@ -57,5 +71,12 @@ class GameServer
     @users.delete(username)
     @games.select{ |game| game.played_by?(username) }.map{|game| game.finish!}
     #TODO: should also find all games with this user and finish them all
+  end
+  
+  def get_user_hand(user_id)
+    nil
+    if @users.has_key? user_id
+      @users[user_id].hand
+    end
   end
 end

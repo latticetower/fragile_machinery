@@ -4,4 +4,5 @@ gem 'eventmachine'
 gem 'state_machine'
 gem 'em-websocket'
 gem 'json'
+gem 'daemons'
 

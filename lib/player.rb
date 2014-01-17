@@ -10,10 +10,10 @@ class Player
   attr_reader :name
   
   
-  def initialize(name)
+  def initialize(user_id)
     @prod_count = 0 # let's suppose these values are zeroes at this point
     @supply_count = 0
-    @name = name
+    @name = user_id
     @deck = Array.new
     @hand = []
   end
