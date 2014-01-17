@@ -1,8 +1,12 @@
 require 'state_machine'
+require File.dirname(__FILE__) + '/player.rb'
+require File.dirname(__FILE__) + '/game/game_callbacks.rb'
 
 class Game
   @first_player = nil #stores Player object with the same name as user has
   @second_player = nil #this stores Player too
+  
+  include GameCallbacks
   
   def users
     [ @first_player, @second_player ]
@@ -35,7 +39,7 @@ class Game
     transition :gain => :deal, :on => :deal_cards
     transition :deal => :combat, :on => :next_move
     transition all - [:finished] => :finished, :on => :stop
-    
+
     #state specific methods
     state :combat, :first_moved, :second_moved, :gain, :deal do
       def playable?
@@ -76,25 +80,45 @@ class Game
       end
     end
     
-    after_transition :gain => :deal do
+    after_transition :gain => :deal do |game, transition|
       @first_player.take_from_deck(1)
       @second_player.take_from_deck(1)
       # TODO: should ask Illionel if game ends when cards are over for both players
       next_move #and should call next_move conditionally
     end
+    after_transition all => :ready do |game, transition|
+      game.game_start_callback(*game.users)
+    end
+    after_transition all - [:finished] => :finished do |game, transition|
+      GameCallbacks::game_end_callback
+    end
   end
+  ##
+  # callbacks
+  #
 
-  #game can be created only when there are two users in it
-  def initialize(user1, user2)
-    super() # NOTE: This *must* be called, otherwise states won't get initialized
-    @first_player, @second_player = Player.new(user1), Player.new(user2)
+  #
+  # end of callbacks
+  
+  def set_ready!
+    puts "game #{state_name}"
+    if created?
+      puts "call confirmation methods"
+      confirm1
+      confirm2
+    end
   end
-  #checks if user plays this game
+  #game can be created only when there are two users in it
+  def initialize(user_id1, user_id2)
+    super() # NOTE: This *must* be called, otherwise states won't get initialized
+    @first_player, @second_player = Player.new(user_id1), Player.new(user_id2)
+  end
+  # checks if user plays this game
   def played_by?(username)
     @first_player.name == username || @second_player.name == username
   end
   #checks if game is for users 1 and 2
-  def played_by?(username1, username2)
+  def played_by_users?(username1, username2)
     played_by?(username1) && played_by?(username2)
   end
   

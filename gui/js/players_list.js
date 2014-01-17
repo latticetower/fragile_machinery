@@ -1,6 +1,8 @@
 ﻿var wsUri2 = "ws://127.0.0.1:8081/"; 
 var playersListElement;
 
+
+
 function initGameGUI() { 
   output = document.getElementById("players_list"); 
   output.innerHTML = "<div id='players'></div>";

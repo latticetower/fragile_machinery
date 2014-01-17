@@ -1,6 +1,6 @@
 require 'em-websocket'
 # websocket server based on simple example from em-websocket page
-require './console_server.rb'
+require File.dirname(__FILE__) + '/console_server.rb'
 chat_host = "0.0.0.0"
 chat_port = 8080
 chat_host = ARGV[0] if ARGV.size > 0
@@ -24,7 +24,7 @@ EM.run {
 
     ws.onclose { 
       puts "Connection closed" 
-      EMGameServer.remove_connection(ws)
+      @@clients[ws].disconnect
       @@clients.delete(ws)
     }
 
