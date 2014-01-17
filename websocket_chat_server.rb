@@ -19,13 +19,13 @@ EM.run {
       # path, query_string, origin, headers
 
       # Publish message to the client
-      ws.send "name #{handshake.methods}"
+      ws.send "Welcome, #{@@clients[ws].name}"
     }
 
     ws.onclose { 
       puts "Connection closed" 
       EMGameServer.remove_connection(ws)
-      @clienst.remove(ws)
+      @@clients.delete(ws)
     }
 
     ws.onmessage { |msg|

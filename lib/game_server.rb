@@ -13,9 +13,13 @@ class GameServer
   end
   
   # api for communicating with event_machine classes
-  def add_user(user)
+  def add_user(object_id, user)
     @users ||= {}
-    @users[user.name] = user 
+    @users[object_id] = user 
+  end
+  
+  def rename(object_id, name)
+    @users[object_id].name = name
   end
   
   def user_list(format = :string)
@@ -23,7 +27,7 @@ class GameServer
     when :json
       @users.to_json
     else
-      @users.keys.join ','
+      @users.values.map{|user| user.name }.join ','
     end
   end
   

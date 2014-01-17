@@ -13,6 +13,7 @@ class User
   end
   def initialize(name)
     super()
+    @is_busy = false
     @name = name
   end
   
@@ -23,7 +24,7 @@ class User
   # serialization to json:
   def to_json(*a)
     {
-      'name' => @student_full_name, 
+      'name' => @name, 
       'busy' => is_busy, 
       'state' => state_name
     }.to_json(*a)
