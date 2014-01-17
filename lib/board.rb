@@ -1,12 +1,5 @@
-require File.dirname(__FILE__) + '/card.rb'
+require File.dirname(__FILE__) + '/board_card.rb'
 
-class BoardCard < Card
-  attr_reader :exhausted
-
-  def initialize
-    @exhausted = false
-  end
-end
 
 class Board
   attr_reader :board_cards

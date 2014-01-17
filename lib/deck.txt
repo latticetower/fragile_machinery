@@ -1,0 +1,50 @@
+﻿[
+  {
+    :@name => 'card1',
+    :@type => 'Unit',
+    :@prod_cost => 10,
+    :@supply_cost => 1,
+    :@health => 10,
+    :@shield => 3,
+    :@attack => 1
+  },
+  {
+    :@name => 'заклинание', :@type => 'Spell'
+  },
+  {
+    :@name => 'сарай',
+    :@type => 'Unit',
+    :@prod_cost => 1,
+    :@supply_cost => 1,
+    :@health => 30,
+    :@shield => 3,
+    :@attack => 0
+  },
+  {
+    :@name => 'сарай1',
+    :@type =>'Unit',
+    :@prod_cost => 1,
+    :@supply_cost => 1,
+    :@health => 30,
+    :@shield => 3,
+    :@attack => 0
+  },
+  {
+    :@name => 'сарай3',
+    :@type => 'Unit',
+    :@prod_cost => 1,
+    :@supply_cost => 1,
+    :@health => 30,
+    :@shield => 3,
+    :@attack => 0
+  },
+  {
+    :@name => 'сарай2',
+    :@type => 'Unit',
+    :@prod_cost => 1,
+    :@supply_cost => 1,
+    :@health => 30,
+    :@shield => 3,
+    :@attack => 0
+  }
+]

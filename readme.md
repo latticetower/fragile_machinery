@@ -7,3 +7,9 @@ Dependencies
 ------------
 - eventmachine
 - state_machine
+
+Additional information
+----------------------
+Basic description (in russian) with state diagrams can be found here: 
+
+http://latticetower.github.io/fragile_machinery/docs/index.html
