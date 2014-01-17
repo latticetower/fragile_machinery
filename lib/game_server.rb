@@ -76,7 +76,7 @@ class GameServer
   def get_user_hand(user_id)
     nil
     if @users.has_key? user_id
-      @users[user_id].get_hand
+      @users[user_id].hand
     end
   end
 end

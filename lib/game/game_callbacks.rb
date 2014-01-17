@@ -1,5 +1,3 @@
-require 'state_machine'
-
 module GameCallbacks
   @@game_callbacks = {}
   @@game_params = {}

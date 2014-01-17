@@ -39,4 +39,6 @@ class User
     }.to_json(*a)
   end
   
+
+  
 end

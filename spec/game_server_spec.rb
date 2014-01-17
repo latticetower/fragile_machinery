@@ -24,6 +24,9 @@ describe "GameServer", "GameServer primitive test" do
       gs.disconnect("n222")
       gs.users.size.must_equal 0
     end
+    it "has some methods" do
+      GameServer.new.must_respond_to :game_by_player
+    end
   end
   
 end

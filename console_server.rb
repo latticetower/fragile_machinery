@@ -68,25 +68,48 @@ class EMGameServer
         EMGameServer.send_to_all(msg.sub("m ", "#{@name}: "))
       #game commands
       when /g with user_[0-9]+/i
-        user_id2 = msg.sub("g with ", "").sub(/[^A-Za-z0-9_]/, '').strip
+        user_id2 = msg.sub("g with ", "").gsub(/[^A-Za-z0-9_]/, '').strip
         puts "#{user_id} sent game request to #{user_id2}"
         send_game_request(user_id2)
       when /g accept user_[0-9]+/
       
-        user_id2 = msg.sub("g accept ", "").sub(/[^A-Za-z0-9_]/, '').strip
+        user_id2 = msg.sub("g accept ", "").gsub(/[^A-Za-z0-9_]/, '').strip
         puts "#{user_id2} accepted request from #{user_id}"
         @@game_server.game_ready(user_id, user_id2)
       when /g reject user_[0-9]+/
-        user_id2 = msg.sub("g reject ", "").sub(/[^A-Za-z0-9_]/, '').strip
+        user_id2 = msg.sub("g reject ", "").gsub(/[^A-Za-z0-9_]/, '').strip
         puts "#{user_id2} rejected request from #{user_id}"
         @@game_server.game_reject(user_id, user_id2)
         
       when /g hand/
         send_hand
+      when /g state/
+        send_game_state(@connection)
+      when /g put [0-9]+/
+        card_id = msg.sub("g put ", "").gsub(/[^0-9]/, '').strip
+        put_user_card_to_board(card_id)
+      when /g target [0-9]+/
+        # not implemented. sets card target
+      when /g next/
+        send_next_move
+      when /g giveup/
+        send_giveup
     end
   end
-
-# service methods
+  
+  # service methods
+  def put_user_card_to_board(card_id)
+    # to be implemented
+  end
+  
+  def send_next_move
+    # to be implemented
+  end
+  
+  def send_giveup
+    # to be implemented
+  end
+  
   def send_user_list
     @connection.send @@game_server.user_list(:json) 
   end
@@ -106,8 +129,14 @@ class EMGameServer
   
   #method sends to user his cards in hand descriptions in json
   def send_hand
+    puts hand.to_json
     hand = @@game_server.get_user_hand(user_id)
     @connection.send hand.to_json
+  end
+  def send_game_state(connection)
+    puts game.to_json
+    game = @@game_server.game_by_player(user_id)
+    connection.send game.to_json
   end
   # end of service methods
 
