@@ -18,8 +18,13 @@ class GameServer
     @users[user.name] = user 
   end
   
-  def user_list
-    @users.keys.join ','
+  def user_list(format = :string)
+    case format
+    when :json
+      @users.to_json
+    else
+      @users.keys.join ','
+    end
   end
   
   # method creates game for users specified and pushes is to @games array
