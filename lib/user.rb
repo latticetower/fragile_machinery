@@ -1,4 +1,5 @@
 require 'state_machine'
+require 'json'
 
 class User
   attr_accessor :name
@@ -11,11 +12,22 @@ class User
     transition all => :disconnected, :on => :disconnect
   end
   def initialize(name)
+    super()
+    @is_busy = false
     @name = name
   end
   
   def busy?
     is_busy
+  end
+  
+  # serialization to json:
+  def to_json(*a)
+    {
+      'name' => @name, 
+      'busy' => is_busy, 
+      'state' => state_name
+    }.to_json(*a)
   end
   
 end
