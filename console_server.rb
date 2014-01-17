@@ -14,10 +14,13 @@ class EMGameServer
   attr_reader :user_id
   attr_reader :name
   @connection
+  @@max_users = 0
   
   def initialize(connection)
+    @@max_users += 1
     @connection = connection
-    @user_id = "user_" + (@@connections.size + 1).to_s
+    @user_id = "user_" + @@max_users.to_s
+    
     @name = @user_id
     @@game_server.add_user(@user_id, User.new(@user_id))
     @@connections[connection] = self
