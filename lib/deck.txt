@@ -1,50 +1,52 @@
 ﻿[
   {
-    :@name => 'card1',
+    :@name => 'Базовый истребитель',
     :@type => 'Unit',
-    :@prod_cost => 10,
-    :@supply_cost => 1,
-    :@health => 10,
-    :@shield => 3,
+    :@prod_cost => 1,
+    :@supply_cost => 0,
+    :@health => 2,
+    :@shield => 0,
     :@attack => 1
   },
   {
     :@name => 'заклинание', :@type => 'Spell'
+    :@prod_cost => 0,
+    :@supply_cost => 1
   },
   {
-    :@name => 'сарай',
+    :@name => 'Истребитель со щитом',
     :@type => 'Unit',
     :@prod_cost => 1,
-    :@supply_cost => 1,
-    :@health => 30,
-    :@shield => 3,
-    :@attack => 0
+    :@supply_cost => 0,
+    :@health => 1,
+    :@shield => 1,
+    :@attack => 1
   },
   {
-    :@name => 'сарай1',
+    :@name => 'Тяжелый истребитель',
     :@type =>'Unit',
-    :@prod_cost => 1,
-    :@supply_cost => 1,
-    :@health => 30,
-    :@shield => 3,
-    :@attack => 0
+    :@prod_cost => 2,
+    :@supply_cost => 0,
+    :@health => 4,
+    :@shield => 0,
+    :@attack => 2
   },
   {
-    :@name => 'сарай3',
+    :@name => 'Ударный корвет',
     :@type => 'Unit',
-    :@prod_cost => 1,
-    :@supply_cost => 1,
-    :@health => 30,
-    :@shield => 3,
-    :@attack => 0
+    :@prod_cost => 3,
+    :@supply_cost => 0,
+    :@health => 4,
+    :@shield => 0,
+    :@attack => 6
   },
   {
-    :@name => 'сарай2',
+    :@name => 'Крейсер',
     :@type => 'Unit',
-    :@prod_cost => 1,
-    :@supply_cost => 1,
-    :@health => 30,
-    :@shield => 3,
-    :@attack => 0
+    :@prod_cost => 4,
+    :@supply_cost => 0,
+    :@health => 6,
+    :@shield => 2,
+    :@attack => 8
   }
 ]
