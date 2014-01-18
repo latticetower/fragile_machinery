@@ -9,9 +9,9 @@
     :@attack => 1
   },
   {
-    :@name => 'заклинание', :@type => 'Spell'
+    :@name => 'Взять две карты из колоды', :@type => 'Spell'
     :@prod_cost => 0,
-    :@supply_cost => 1
+    :@supply_cost => 2
   },
   {
     :@name => 'Истребитель со щитом',
