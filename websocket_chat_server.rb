@@ -39,4 +39,7 @@ EM.run {
       # ws.send "#{msg}"
     }
   end
+  EM::add_periodic_timer(5) {
+    EMGameServer.send_user_list_to_all 
+  }
 }

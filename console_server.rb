@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
 # server_1
-
+require 'json'
 require 'rubygems'
 require 'eventmachine'
 require File.dirname(__FILE__) + '/lib/game_server.rb'
@@ -44,18 +44,23 @@ class EMGameServer
     EMGameServer.chat_channel.unsubscribe(@chat_sid)
     EMGameServer.user_list_channel.unsubscribe(@users_sid)
   end
-    
+  
+  def self.send_user_list_to_all
+    user_list_with_params =  {
+      'data' => @@game_server.user_list(:json),
+      'type' => 'user_list'
+    }.to_json
+    EMGameServer.user_list_channel.push user_list_with_params
+  end
+
   def post_init
     puts "-- someone connected to the echo server!"
   end
-
 
   def new_user
     @user_id = data.sub("new user ", "").strip
     
   end
-  
-
   
   def disconnect
     @@game_server.disconnect(@user_id)

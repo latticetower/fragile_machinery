@@ -15,26 +15,35 @@ border: 1px solid grey;
 }
 div #chat_container{
 border:1px solid blue;
-width: "50px";
-height: "100px";
+width: 90%;
+height: 200px;
 position: absolute;
 left: 0;
 bottom: 0;
 }
 
-div #players_list{
-border:1px solid blue;
-width: "50px";
-height: "100px";
-position: absolute;
-}
-
 div #chat_output{
 border:1px solid grey;
+height: 150px;
 overflow: auto;
-height: 300px; 
-
 }
+
+div #players_list{
+border:1px solid blue;
+width: 200px;
+height: 100px;
+overflow: auto;
+}
+
+div #rename_container{
+border:1px solid blue;
+width: 200px;
+height: 50px;
+position: absolute;
+right: 0;
+top: 0;
+}
+
 #command_buttons{
 
 background-color:white;
