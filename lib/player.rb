@@ -1,3 +1,6 @@
+require 'json'
+require File.dirname(__FILE__) + '/card.rb'
+
 class Player
   BASE_MP = 100
   attr_reader :prod_count, 
@@ -66,5 +69,17 @@ class Player
   def take_from_hand(card_id)
     # TODO: remove from hand card from given position
     # move it to the board
+  end
+  
+  def to_json
+    {
+      'stats' => {
+        'prod' => prod_count, 
+        'supply' => supply_count
+      },
+      'board' => board.to_json,
+      'hand_size' => hand_size,
+      'deck_size' => deck_size,
+    }.to_json
   end
 end

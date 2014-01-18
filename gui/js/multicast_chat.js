@@ -1,4 +1,4 @@
-﻿var wsUri = "ws://106.187.53.147:8080/"; 
+﻿var wsUri = "ws://127.0.0.1:8080/"; 
 var chatOutputElement;
 
 function initChat() { 

@@ -9,31 +9,37 @@ chat_port = ARGV[1].to_i if ARGV.size > 1
 
 @@clients = {}
 # we need to create channel for broadcasted messages, when we create task which sends data via it
-EM.run {
-  EM::WebSocket.run(:host => chat_host, :port => chat_port) do |ws|
-    
-    ws.onopen { |handshake|
-      puts "Someone opened WebSocket connection"
-      @@clients[ws] = EMGameServer.new(ws)
-      @@clients[ws].subscribe
-      # EMGameServer::add_connection(ws)
-      # Publish message to the client
-      ws.send EMGameServer.get_chat_message("Welcome, #{@@clients[ws].name}")
-    }
 
-    ws.onclose { 
-      puts "Connection closed" 
-      @@clients[ws].unsubscribe
-      @@clients[ws].disconnect
-      @@clients.delete(ws)
-    }
+begin
+  EM.run {
+    EM::WebSocket.run(:host => chat_host, :port => chat_port) do |ws|
+      
+      ws.onopen { |handshake|
+        puts "Someone opened WebSocket connection"
+        @@clients[ws] = EMGameServer.new(ws)
+        @@clients[ws].subscribe
+        # Publish message to the client
+        ws.send EMGameServer.get_chat_message("Welcome, #{@@clients[ws].name}")
+      }
 
-    ws.onmessage { |msg|
-      puts "Recieved message: #{msg}"
-      @@clients[ws].process_message(msg)
+      ws.onclose { 
+        puts "Connection closed" 
+        @@clients[ws].unsubscribe
+        @@clients[ws].disconnect
+        @@clients.delete(ws)
+      }
+
+      ws.onmessage { |msg|
+        puts "Recieved message: #{msg}"
+        @@clients[ws].process_message(msg)
+      }
+    end
+    EM::add_periodic_timer(5) {
+      EMGameServer.send_user_list_to_all 
     }
-  end
-  EM::add_periodic_timer(5) {
-    EMGameServer.send_user_list_to_all 
   }
-}
+rescue Exception => e
+  f = File.new('errors.txt', 'a')
+  f.puts e
+  f.close
+end

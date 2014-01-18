@@ -77,6 +77,7 @@ class Game
         @second_player.load_deck
         @second_player.shuffle_deck!
         @second_player.take_from_deck(5)
+        
       end
     end
     
@@ -88,9 +89,14 @@ class Game
     end
     after_transition all => :ready do |game, transition|
       game.game_start_callback(*game.users)
+      puts "before prepare cards call"
+      game.prepare_cards
+      puts "after prepare cards call"
+      game.game_state_changed_callback
     end
     after_transition all - [:finished] => :finished do |game, transition|
-      GameCallbacks::game_end_callback
+      game.game_state_changed_callback
+      game.game_end_callback
     end
   end
   ##
@@ -151,6 +157,15 @@ class Game
   # 
   def handle_action(username, actiontype)
   
+  end
+  
+  def to_json
+    {
+      # first player data:
+      @first_player.name => @first_player.to_json,
+      # second player data
+      @second_player.name => @second_player.to_json
+    }.to_json
   end
   
 

@@ -145,13 +145,22 @@ class EMGameServer
   
   # service methods
   def start_new_game(user_id2)
-    @@game_server.game_ready(user_id, user_id2)
-    
     channel = EM::Channel.new
     @@game_channels << channel
     @@connections[user_id].set_game_channel(channel) 
     @@connections[user_id2].set_game_channel(channel)
     channel.push EMGameServer.get_chat_message('game started')
+    start_message = {'type' => 'state', 'data' => 'game_started'}.to_json
+    channel.push start_message
+    
+    @@game_server.game_ready(user_id, user_id2) do |game|
+      game.on_game_state_changed do 
+        puts "on game state changed in console server"
+        changes = {'type' => 'table_state', 'data' => {'jjj'=>game.to_json} }.to_json #TODO: change event type
+        channel.push changes
+      end
+    end
+    
   end
   
   def put_user_card_to_board(card_id)

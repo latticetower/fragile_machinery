@@ -19,6 +19,10 @@ module GameCallbacks
     @@game_callbacks[:game_end].call if @@game_callbacks.has_key? :game_end
   end
   
+  def game_state_changed_callback
+    @@game_callbacks[:game_state_changed].call if @@game_callbacks.has_key? :game_state_changed
+  end
+  
   def on_game_start(user_id1, user_id2, &block)
     @@game_callbacks[:game_start] = block
     @@game_params[:game_start] = [user_id1, user_id2]
@@ -26,6 +30,10 @@ module GameCallbacks
   
   def on_game_end(&block)
     @@game_callbacks[:game_end] = block
+  end
+  
+  def on_game_state_changed(&block)
+    @@game_callbacks[:game_state_changed] = block
   end
   #
   # end of callbacks

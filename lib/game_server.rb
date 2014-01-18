@@ -51,7 +51,12 @@ class GameServer
   end
 
   def game_ready(user_id1, user_id2)
-    @games.select{ |game| game.played_by_users?(user_id1, user_id2) }.map{|game| game.set_ready!}
+    games = @games.select{ |game| game.played_by_users?(user_id1, user_id2) }
+    games.each do |game|
+      yield(game) if block_given?
+      game.set_ready!
+    end
+    #.map{|game| game.set_ready!}
     #TODO: should add method to game to return users
   end
   def game_reject(user1, user2)
