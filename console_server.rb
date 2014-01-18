@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
 # server_1
-
+require 'json'
 require 'rubygems'
 require 'eventmachine'
 require File.dirname(__FILE__) + '/lib/game_server.rb'
@@ -15,7 +15,34 @@ class EMGameServer
   attr_reader :name
   @connection
   @@max_users = 0
+  @@game_channels = []
+  @game_channel = nil
+  @game_channel_sid
   
+  def set_game_channel(channel)
+    if channel.nil?
+      @game_channel.unsubscribe(@game_channel_sid) unless @game_channel.nil
+    else
+      @game_channel_sid = channel.subscribe{|msg| @connection.send msg }
+    end
+    @game_channel = channel
+  end
+  
+  def send_to_game_channel(msg)
+    unless @game_channel.nil?
+      @game_channel.push msg
+    end    
+  end
+  # broadcast channels & stuff
+  # chat channel
+  def self.chat_channel
+    @@chat_channel ||= EM::Channel.new
+  end
+  # user_list channel
+  def self.user_list_channel
+    @@users_channel ||= EM::Channel.new
+  end
+  # end of broadcast channels& stuff
   def initialize(connection)
     @@max_users += 1
     @connection = connection
@@ -23,20 +50,35 @@ class EMGameServer
     
     @name = @user_id
     @@game_server.add_user(@user_id, User.new(@user_id))
-    @@connections[@user_id] = self
+    @@connections[@user_id] = self    
   end
-    
+  
+  def subscribe
+    @chat_sid = EMGameServer.chat_channel.subscribe{|msg| @connection.send msg }
+    @users_sid = EMGameServer.user_list_channel.subscribe{|msg| @connection.send msg}
+  end
+  
+  def unsubscribe
+    EMGameServer.chat_channel.unsubscribe(@chat_sid)
+    EMGameServer.user_list_channel.unsubscribe(@users_sid)
+  end
+  
+  def self.send_user_list_to_all
+    user_list_with_params =  {
+      'data' => @@game_server.user_list(:json),
+      'type' => 'user_list'
+    }.to_json
+    EMGameServer.user_list_channel.push user_list_with_params
+  end
+
   def post_init
     puts "-- someone connected to the echo server!"
   end
-
 
   def new_user
     @user_id = data.sub("new user ", "").strip
     
   end
-  
-
   
   def disconnect
     @@game_server.disconnect(@user_id)
@@ -52,6 +94,10 @@ class EMGameServer
       v.send msg
     end
   end
+  
+  def self.get_chat_message msg
+    {'type' => 'message', 'data' => msg}.to_json
+  end
     
   def process_message msg
     puts "got message: #{msg}"
@@ -65,7 +111,7 @@ class EMGameServer
         rename_user(name) if name.size > 0
       when /m /
         puts "broadcast message"
-        EMGameServer.send_to_all(msg.sub("m ", "#{@name}: "))
+        EMGameServer.chat_channel.push EMGameServer.get_chat_message(msg.sub("m ", "#{@name}: "))
       #game commands
       when /g with user_[0-9]+/i
         user_id2 = msg.sub("g with ", "").gsub(/[^A-Za-z0-9_]/, '').strip
@@ -74,8 +120,8 @@ class EMGameServer
       when /g accept user_[0-9]+/
       
         user_id2 = msg.sub("g accept ", "").gsub(/[^A-Za-z0-9_]/, '').strip
-        puts "#{user_id2} accepted request from #{user_id}"
-        @@game_server.game_ready(user_id, user_id2)
+        puts "#{user_id} accepted request from #{user_id2}"
+        start_new_game(user_id2)
       when /g reject user_[0-9]+/
         user_id2 = msg.sub("g reject ", "").gsub(/[^A-Za-z0-9_]/, '').strip
         puts "#{user_id2} rejected request from #{user_id}"
@@ -98,6 +144,16 @@ class EMGameServer
   end
   
   # service methods
+  def start_new_game(user_id2)
+    @@game_server.game_ready(user_id, user_id2)
+    
+    channel = EM::Channel.new
+    @@game_channels << channel
+    @@connections[user_id].set_game_channel(channel) 
+    @@connections[user_id2].set_game_channel(channel)
+    channel.push EMGameServer.get_chat_message('game started')
+  end
+  
   def put_user_card_to_board(card_id)
     # to be implemented
   end
@@ -122,8 +178,10 @@ class EMGameServer
   def send_game_request(user_id2)
     return unless @@connections.has_key? user_id2
     @@game_server.create_game(@user_id, user_id2)
-    @@connections[user_id2].send "#{user_id} requested game <a href='#' onclick='sendAccept(\"#{user_id}\")'>accept</a> or <a href='#' onclick='sendDecline(\"#{user_id}\")'>decline</a>"
-    #TODO: need to send json request
+    @@connections[user_id2].send EMGameServer.get_chat_message("#{user_id} requested game " + 
+        "<a href='#' onclick='sendAccept(\"#{user_id}\")'>accept</a>" + 
+        " or <a href='#' onclick='sendDecline(\"#{user_id}\")'>decline</a>")
+    # TODO: need to send json request
     # also user_id sends request - it means he accepts the game
   end
   
@@ -139,27 +197,7 @@ class EMGameServer
     connection.send game.to_json
   end
   # end of service methods
-
-  def receive_data data
-    #send_data ">>> you sent: #{data}"
-    puts "command recieved: #{data}"
-    if data == "u list"
-      
-    end
-
-    
-    if data.index("new user") == 0 
-      @user_id = data.sub("new user ", "").strip
-      @@game_server.add_user(user_id, User.new(@username))
-      @@connections[@user_id] = self
-    end
-  end
   
-  def unbind
-    @@connections.delete(self.user_id)
-    @@game_server.remove_user(user_id)
-    puts "#{self.user_id} is out"
-  end
 end
 
  # EventMachine::run {

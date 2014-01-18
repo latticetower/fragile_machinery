@@ -1,4 +1,4 @@
-﻿var wsUri = "ws://127.0.0.1:8080/"; 
+﻿var wsUri = "ws://106.187.53.147:8080/"; 
 var chatOutputElement;
 
 function initChat() { 
@@ -26,9 +26,23 @@ function onClose(evt) {
   writeToScreen("DISCONNECTED"); 
 }  
 function onMessage(evt) { 
-  writeToScreen('<span style="color: blue;">' + evt.data+'</span>'); 
+ 
+  var obj  = JSON.parse(evt.data);
+
+  if (obj.type == 'user_list') {
+    updateUserList(obj.data);
+    return;
+  }
+ //writeToScreen('<span style="color: blue;">' + evt.data+'</span>'); 
+  if (obj.type == 'message') {
+  //alert('got message');
+    onNewChatMessage(obj.data);
+    return;
+  }
+  
   //websocket.close(); 
-}  
+}
+
 function onError(evt) { 
   writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data); 
 }  
@@ -38,7 +52,7 @@ function doSend(message) {
 }
 function sendMessage(value) {
   //output = document.getElementById("chat_container"); 
-  doSend(value);
+  doSend("m " + value);
 }
 function writeToScreen(message) { 
   var pre = document.createElement("p"); 
@@ -51,9 +65,18 @@ window.addEventListener("load", initChat, false);
 
 function sendAccept(user_id) {
   doSend("g accept " + user_id);
-
 }
 function sendDecline(user_id) {
 doSend("g reject " + user_id);
+}
 
+function sendRenameCommand(newname) {
+  doSend("u rename " + newname);
+}
+function inviteToGame(user_id) {
+  doSend("g with " + user_id);
+}
+
+function onNewChatMessage(data) {
+  writeToScreen('<span style="color: black;">' + data+'</span>'); 
 }
