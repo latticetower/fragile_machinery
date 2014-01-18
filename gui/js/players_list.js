@@ -6,7 +6,9 @@
     users[key];
      var d = document.createElement("div"); 
      d.id = key;
-     d.innerHTML =  "" + obj[key].name; 
+     d.innerHTML =  "" + obj[key].name;
+     if (obj[key].busy == false)
+      d.innerHTML  += " <a href='#' onclick=inviteToGame('" + key + "')>Пригласить</a>"; 
    players_container.appendChild(d);
 }
  

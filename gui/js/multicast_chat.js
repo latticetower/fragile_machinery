@@ -26,17 +26,20 @@ function onClose(evt) {
   writeToScreen("DISCONNECTED"); 
 }  
 function onMessage(evt) { 
+ 
   var obj  = JSON.parse(evt.data);
 
   if (obj.type == 'user_list') {
     updateUserList(obj.data);
     return;
   }
+ //writeToScreen('<span style="color: blue;">' + evt.data+'</span>'); 
   if (obj.type == 'message') {
+  //alert('got message');
     onNewChatMessage(obj.data);
     return;
   }
-  writeToScreen('<span style="color: blue;">' + evt.data+'</span>'); 
+  
   //websocket.close(); 
 }
 
@@ -62,7 +65,6 @@ window.addEventListener("load", initChat, false);
 
 function sendAccept(user_id) {
   doSend("g accept " + user_id);
-
 }
 function sendDecline(user_id) {
 doSend("g reject " + user_id);
@@ -70,4 +72,11 @@ doSend("g reject " + user_id);
 
 function sendRenameCommand(newname) {
   doSend("u rename " + newname);
+}
+function inviteToGame(user_id) {
+  doSend("g with " + user_id);
+}
+
+function onNewChatMessage(data) {
+  writeToScreen('<span style="color: black;">' + data+'</span>'); 
 }

@@ -21,7 +21,7 @@ EM.run {
       # path, query_string, origin, headers
 
       # Publish message to the client
-      ws.send "Welcome, #{@@clients[ws].name}"
+      ws.send EMGameServer.get_chat_message("Welcome, #{@@clients[ws].name}")
     }
 
     ws.onclose { 
