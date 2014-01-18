@@ -841,11 +841,8 @@ m &lt;message&gt; - команда широковещательный пакет
 </li>
 </ul></div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_команды_игрового_процесса">Команды игрового процесса</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_команды_игрового_процесса">Команды игрового процесса</h3>
 <div class="ulist"><ul>
 <li>
 <p>
@@ -896,10 +893,47 @@ g giveup - добровольная сдача игрока
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_eventmachine_описание_взаимодействия">EventMachine. Описание взаимодействия</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>По идее, должно быть несколько общедоступных каналов, отвечающих за взаимодействие разных частей системы. В частности:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+широковещательный канал для чата
+</p>
+</li>
+<li>
+<p>
+широковещательный канал со списком игроков (обновляемый с определенной периодичностью)
+</p>
+</li>
+<li>
+<p>
+канал игры (куда падают все изменения открытых частей игры - то есть, количество карт в руках у игроков, состояние карт на столе, и тд)
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Полезные ссылки</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<a href="http://pusher.com/docs/client_api_guide/client_channels">http://pusher.com/docs/client_api_guide/client_channels</a>
+</p>
+</li>
+<li>
+<p>
+<a href="https://gist.github.com/jShaf/1d99514dbbdb69f5c4b6">https://gist.github.com/jShaf/1d99514dbbdb69f5c4b6</a>
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+</div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-01-17 10:46:35 Московское время (зима)
+Last updated 2014-01-18 09:58:24 Московское время (зима)
 </div>
 </div>
 </body>
