@@ -9,6 +9,7 @@ chat_port = ARGV[1].to_i if ARGV.size > 1
 
 @@clients = {}
 
+begin
 EM.run {
   EM::WebSocket.run(:host => chat_host, :port => chat_port) do |ws|
     ws.onopen { |handshake|
@@ -37,3 +38,8 @@ EM.run {
     }
   end
 }
+rescue Exception => e
+  f = File.new("errors.txt", 'a')
+  f.puts e
+  f.close
+end
