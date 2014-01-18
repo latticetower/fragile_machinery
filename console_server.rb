@@ -15,7 +15,16 @@ class EMGameServer
   attr_reader :name
   @connection
   @@max_users = 0
-  
+  # broadcast channels & stuff
+  # chat channel
+  def self.chat_channel
+    @@chat_channel ||= EM::Channel.new
+  end
+  # user_list channel
+  def self.user_list_channel
+    @@users_channel ||= EM::Channel.new
+  end
+  # end of broadcast channels& stuff
   def initialize(connection)
     @@max_users += 1
     @connection = connection
@@ -23,7 +32,17 @@ class EMGameServer
     
     @name = @user_id
     @@game_server.add_user(@user_id, User.new(@user_id))
-    @@connections[@user_id] = self
+    @@connections[@user_id] = self    
+  end
+  
+  def subscribe
+    @chat_sid = EMGameServer.chat_channel.subscribe{|msg| @connection.send msg }
+    @users_sid = EMGameServer.user_list_channel.subscribe{|msg| @connection.send msg}
+  end
+  
+  def unsubscribe
+    EMGameServer.chat_channel.unsubscribe(@chat_sid)
+    EMGameServer.user_list_channel.unsubscribe(@users_sid)
   end
     
   def post_init

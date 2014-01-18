@@ -8,13 +8,14 @@ chat_port = ARGV[1].to_i if ARGV.size > 1
 
 
 @@clients = {}
-
-begin
+# we need to create channel for broadcasted messages, when we create task which sends data via it
 EM.run {
   EM::WebSocket.run(:host => chat_host, :port => chat_port) do |ws|
+    
     ws.onopen { |handshake|
       puts "Someone opened WebSocket connection"
       @@clients[ws] = EMGameServer.new(ws)
+      @@clients[ws].subscribe
       # EMGameServer::add_connection(ws)
       # Access properties on the EM::WebSocket::Handshake object, e.g.
       # path, query_string, origin, headers
@@ -25,6 +26,7 @@ EM.run {
 
     ws.onclose { 
       puts "Connection closed" 
+      @@clients[ws].unsubscribe
       @@clients[ws].disconnect
       @@clients.delete(ws)
     }
@@ -38,8 +40,3 @@ EM.run {
     }
   end
 }
-rescue Exception => e
-  f = File.new("errors.txt", 'a')
-  f.puts e
-  f.close
-end
