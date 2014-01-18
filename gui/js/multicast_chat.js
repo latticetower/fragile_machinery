@@ -48,3 +48,12 @@ function writeToScreen(message) {
 }
 
 window.addEventListener("load", initChat, false);  
+
+function sendAccept(user_id) {
+  doSend("g accept " + user_id);
+
+}
+function sendDecline(user_id) {
+doSend("g reject " + user_id);
+
+}
