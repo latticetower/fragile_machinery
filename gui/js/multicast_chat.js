@@ -1,4 +1,5 @@
 ﻿var wsUri = "ws://127.0.0.1:8080/"; 
+var currentId = "";//влияет только на отрисовку стола
 var chatOutputElement;
 
 function initChat() { 
@@ -11,6 +12,7 @@ function initChat() {
   chatOutputElement = document.getElementById("chat_output");
   testWebSocket(); 
 }  
+
 function testWebSocket() { 
   websocket = new WebSocket(wsUri); 
   websocket.onopen = function(evt) { onOpen(evt) }; 
@@ -38,6 +40,18 @@ function onMessage(evt) {
   //alert('got message');
     onNewChatMessage(obj.data);
     return;
+  }
+  if (obj.type == 'state') {
+    if (obj.data == 'game_started') {
+      initTable();
+    }
+  }
+  if (obj.type == 'table_state') {
+    redrawTable(obj.data);
+  }
+  if (obj.type == 'info') {
+    if (obj.user_id)
+      currentId = obj.user_id;
   }
   
   //websocket.close(); 

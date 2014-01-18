@@ -11,10 +11,24 @@
 <link rel="stylesheet" type="text/css"href="css/style.css"></link>
 </head>
 <body>
-<h2>Да, я плохой художник :(</h2>
+<h2>Чатик справа, ники принимаются только латиницей</h2>
 <div>
 <!--Контейнер со списком игроков-->
 <div id="players_list"></div>
+
+<div id="table_container">
+<div id="player1_container" class="board_container">
+  <div id="player1_hand"></div>
+  <div id="player1_board">
+  <p> Производство: <span id ="player1_prod">-</span> Поставки: <span id ="player1_supply">-</span></p>
+  </div>
+</div>
+<div id= "player2_container"  class="board_container">
+  <div id="player2_hand" ></div>
+  <div id="player2_board"></div>
+  <p> Производство: <span id ="player2_prod">-</span> Поставки: <span id ="player2_supply">-</span></p>
+</div>
+</div>
 
 <!--Контейнер для чата-->
 <div id="chat_container"></div>

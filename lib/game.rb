@@ -160,12 +160,12 @@ class Game
   end
   
   def to_json
-    {
+    [
       # first player data:
-      @first_player.name => @first_player.to_json,
+      @first_player.to_hash,
       # second player data
-      @second_player.name => @second_player.to_json
-    }.to_json
+      @second_player.to_hash
+    ].to_json
   end
   
 

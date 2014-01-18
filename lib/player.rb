@@ -72,14 +72,16 @@ class Player
   end
   
   def to_json
+    to_hash.to_json
+  end
+  def to_hash
     {
-      'stats' => {
-        'prod' => prod_count, 
-        'supply' => supply_count
-      },
+      'user_id' => name,
+      'prod' => prod_count, 
+      'supply' => supply_count,
       'board' => board.to_json,
       'hand_size' => hand_size,
       'deck_size' => deck_size,
-    }.to_json
+    }
   end
 end

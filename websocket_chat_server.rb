@@ -19,7 +19,8 @@ begin
         @@clients[ws] = EMGameServer.new(ws)
         @@clients[ws].subscribe
         # Publish message to the client
-        ws.send EMGameServer.get_chat_message("Welcome, #{@@clients[ws].name}")
+       
+       
       }
 
       ws.onclose { 

@@ -50,7 +50,12 @@ class EMGameServer
     
     @name = @user_id
     @@game_server.add_user(@user_id, User.new(@user_id))
-    @@connections[@user_id] = self    
+    @@connections[@user_id] = self  
+    
+    connection.send EMGameServer.get_chat_message("Welcome, #{name}")
+    message = {'type' => 'info', 'user_id' => @user_id}.to_json
+    connection.send message
+    
   end
   
   def subscribe
@@ -156,7 +161,7 @@ class EMGameServer
     @@game_server.game_ready(user_id, user_id2) do |game|
       game.on_game_state_changed do 
         puts "on game state changed in console server"
-        changes = {'type' => 'table_state', 'data' => {'jjj'=>game.to_json} }.to_json #TODO: change event type
+        changes = {'type' => 'table_state', 'data' => game.to_json }.to_json #TODO: change event type
         channel.push changes
       end
     end
