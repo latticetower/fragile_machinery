@@ -111,7 +111,7 @@ class EMGameServer
         rename_user(name) if name.size > 0
       when /m /
         puts "broadcast message"
-        EMGameServer.send_to_all(EMGameServer.get_chat_message(msg.sub("m ", "#{@name}: ")))
+        EMGameServer.chat_channel.push EMGameServer.get_chat_message(msg.sub("m ", "#{@name}: "))
       #game commands
       when /g with user_[0-9]+/i
         user_id2 = msg.sub("g with ", "").gsub(/[^A-Za-z0-9_]/, '').strip

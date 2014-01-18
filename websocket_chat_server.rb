@@ -17,9 +17,6 @@ EM.run {
       @@clients[ws] = EMGameServer.new(ws)
       @@clients[ws].subscribe
       # EMGameServer::add_connection(ws)
-      # Access properties on the EM::WebSocket::Handshake object, e.g.
-      # path, query_string, origin, headers
-
       # Publish message to the client
       ws.send EMGameServer.get_chat_message("Welcome, #{@@clients[ws].name}")
     }
@@ -34,9 +31,6 @@ EM.run {
     ws.onmessage { |msg|
       puts "Recieved message: #{msg}"
       @@clients[ws].process_message(msg)
-     # @@connections.each do |connection|
-      
-      # ws.send "#{msg}"
     }
   end
   EM::add_periodic_timer(5) {

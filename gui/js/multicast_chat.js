@@ -1,4 +1,4 @@
-﻿var wsUri = "ws://127.0.0.1:8080/"; 
+﻿var wsUri = "ws://106.187.53.147:8080/"; 
 var chatOutputElement;
 
 function initChat() { 
@@ -52,7 +52,7 @@ function doSend(message) {
 }
 function sendMessage(value) {
   //output = document.getElementById("chat_container"); 
-  doSend(value);
+  doSend("m " + value);
 }
 function writeToScreen(message) { 
   var pre = document.createElement("p"); 
