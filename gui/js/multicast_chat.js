@@ -22,11 +22,11 @@ function testWebSocket() {
   websocket.onerror = function(evt) { onError(evt) }; 
 }  
 function onOpen(evt) { 
-  writeToScreen("CONNECTED"); 
+  updateStatus("CONNECTED");  
   //doSend("WebSocket rocks"); 
 }  
 function onClose(evt) { 
-  writeToScreen("DISCONNECTED"); 
+  updateStatus("DISCONNECTED"); 
 }  
 function onMessage(evt) { 
  

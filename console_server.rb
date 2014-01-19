@@ -52,7 +52,7 @@ class EMGameServer
     @@game_server.add_user(@user_id, User.new(@user_id))
     @@connections[@user_id] = self  
     
-    connection.send EMGameServer.get_chat_message("Welcome, #{name}")
+    connection.send EMGameServer.get_chat_message("Привет, #{name}! Можешь переименоваться на свое усмотрение и пригласить кого-нибудь поиграть.")
     message = {'type' => 'info', 'user_id' => @user_id}.to_json
     connection.send message
     

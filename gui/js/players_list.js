@@ -58,3 +58,12 @@ function renderCard(card) {
   var template = $("#template-card").html();
   return Mustache.render(template, card);
 }
+
+function updateStatus(status) {
+  if (status == "CONNECTED") {
+    $('#my_status').toggleClass('status-connected');
+  }
+  if (status == "DISCONNECTED") {
+    $('#my_status').toggleClass('status-disconnected');
+  }
+}

@@ -119,3 +119,25 @@ background-size: cover;
 ul > li {
   list-style-type: none;
 }
+
+.status-undefined {
+  background-image: url("../img/iconmonstr-light-bulb-11-icon-48.png");
+  background-size: cover;
+}
+.status-connected {
+  background-image: url("../img/iconmonstr-light-bulb-16-icon-48.png");
+  background-size: cover;
+}
+.status-disconnected {
+  background-image: url("../img/iconmonstr-light-bulb-7-icon-48.png");
+  background-size: cover;
+}
+
+#my_status{
+  background-size: cover;
+  width: 24px;
+  height: 24px; 
+  margin-left: auto;
+  margin-right: auto;
+  display: inline-block;
+}
