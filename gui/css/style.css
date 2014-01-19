@@ -108,8 +108,8 @@ div #rename_container{
   height: 70px;
   margin-left: auto;
   margin-right: auto;
-
-  background-image: url("../img/card_unknown.png");
+background-size: cover;
+  background-image: url("../img/iconmonstr-rocket-11-icon-128.png");
 }
 
 .card-stats {
