@@ -1,4 +1,5 @@
-﻿var wsUri = "ws://127.0.0.1:8080/"; 
+﻿//var wsUri = "ws://106.187.53.147:8080/"; 
+var wsUri = "ws://127.0.0.1:8080/"; 
 var currentId = "";//влияет только на отрисовку стола
 var chatOutputElement;
 
@@ -30,26 +31,32 @@ function onClose(evt) {
 function onMessage(evt) { 
  
   var obj  = JSON.parse(evt.data);
-
+  console.log(obj);
+  
   if (obj.type == 'user_list') {
     updateUserList(obj.data);
     return;
   }
  //writeToScreen('<span style="color: blue;">' + evt.data+'</span>'); 
-  if (obj.type == 'message') {
+  else if (obj.type == 'message') {
   //alert('got message');
     onNewChatMessage(obj.data);
     return;
   }
-  if (obj.type == 'state') {
+  else if (obj.type == 'state') {
     if (obj.data == 'game_started') {
       initTable();
     }
   }
-  if (obj.type == 'table_state') {
+  else if (obj.type == 'table_state') {
     redrawTable(obj.data);
   }
-  if (obj.type == 'info') {
+  
+  else if (obj.type == 'hand') {
+    redrawHand(obj.data);
+  }
+  
+  else if (obj.type == 'info') {
     if (obj.user_id)
       currentId = obj.user_id;
   }
@@ -73,6 +80,7 @@ function writeToScreen(message) {
   pre.style.wordWrap = "break-word"; 
   pre.innerHTML = message; 
   chatOutputElement.appendChild(pre); 
+  $("#chat_output").scrollTop($("#chat_output").height());
 }
 
 window.addEventListener("load", initChat, false);  
@@ -89,6 +97,10 @@ function sendRenameCommand(newname) {
 }
 function inviteToGame(user_id) {
   doSend("g with " + user_id);
+}
+
+function sendGetMyHand() {
+  doSend("g hand " + user_id);
 }
 
 function onNewChatMessage(data) {

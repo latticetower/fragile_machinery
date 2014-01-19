@@ -73,11 +73,12 @@ class Game
         @first_player.load_deck
         @first_player.shuffle_deck!
         @first_player.take_from_deck(4)
+        @first_player.increase_prod(10)
+        @first_player.increase_supply(20)
         
         @second_player.load_deck
         @second_player.shuffle_deck!
         @second_player.take_from_deck(5)
-        
       end
     end
     
@@ -97,6 +98,10 @@ class Game
     after_transition all - [:finished] => :finished do |game, transition|
       game.game_state_changed_callback
       game.game_end_callback
+    end
+    
+    after_transition all => all do |game, transition|
+      puts transition.inspect
     end
   end
   ##

@@ -24,17 +24,17 @@ class Card
   end
   
   
-  def self.from_hash(card)
-    subclass = @@subclasses.select{|c| c.name == card[:@type] }
+  def self.from_hash(card_info)
+    subclass = @@subclasses.select{|c| c.name == card_info[:@type] }
     unless subclass.nil? or subclass.size == 0
-      # puts "ancestor with specific type found #{subclass}"
-      s = subclass[0].new(card[:name])
-      card.each_pair do |k, v|
-        if s.instance_variable_defined? k
-          s.instance_variable_set k, v
+      puts "ancestor with specific type found #{subclass}"
+      card = subclass[0].new(card_info[:name])
+      card_info.each_pair do |k, v|
+        if card.instance_variable_defined? k
+          card.instance_variable_set k, v
         end
       end
-      s
+      card
     end
   end
 end

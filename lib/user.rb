@@ -7,7 +7,7 @@ class User
   attr_accessor :player
   
   def hand
-    @player.hand if @player && state == :in_game
+    @player.hand #if state == :in_game && @player
   end
   
   state_machine :initial => :free do
@@ -20,6 +20,7 @@ class User
       player = nil
     end
   end
+  
   def initialize(name)
     super()
     @is_busy = false

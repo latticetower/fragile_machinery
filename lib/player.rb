@@ -1,5 +1,8 @@
 require 'json'
 require File.dirname(__FILE__) + '/card.rb'
+# we must include this two guys somewhere
+require File.dirname(__FILE__) + '/unit.rb'
+require File.dirname(__FILE__) + '/spell.rb'
 
 class Player
   BASE_MP = 100
@@ -33,6 +36,8 @@ class Player
     File.open(File.dirname(__FILE__) + '/deck.txt') do |file|
       begin
         @deck = eval(file.lines.to_a.join('') ).map{ |card| Card.from_hash(card) }
+        puts 'deck loaded'
+        @deck.each{ |x| puts x.inspect }
       rescue Exception => e
         puts "got exception #{e.message}"
         @deck = []
@@ -71,9 +76,18 @@ class Player
     # move it to the board
   end
   
+  def increase_prod(amount)
+    @prod_count += amount
+  end
+  
+  def increase_supply(amount)
+    @supply_count += amount
+  end
+  
   def to_json
     to_hash.to_json
   end
+  
   def to_hash
     {
       'user_id' => name,

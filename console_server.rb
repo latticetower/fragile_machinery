@@ -163,6 +163,10 @@ class EMGameServer
         puts "on game state changed in console server"
         changes = {'type' => 'table_state', 'data' => game.to_json }.to_json #TODO: change event type
         channel.push changes
+        
+        # send hands separately
+        @@connections[user_id].send_hand
+        @@connections[user_id2].send_hand
       end
     end
     
@@ -201,10 +205,12 @@ class EMGameServer
   
   #method sends to user his cards in hand descriptions in json
   def send_hand
-    puts hand.to_json
     hand = @@game_server.get_user_hand(user_id)
-    @connection.send hand.to_json
+    puts hand.inspect
+    payload = { 'type' => 'hand', 'data' => hand.map{ |c| c.to_hash } }.to_json
+    @connection.send payload
   end
+  
   def send_game_state(connection)
     puts game.to_json
     game = @@game_server.game_by_player(user_id)

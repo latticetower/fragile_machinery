@@ -9,7 +9,8 @@
     :@attack => 1
   },
   {
-    :@name => 'Взять две карты из колоды', :@type => 'Spell'
+    :@name => 'Взять две карты из колоды', 
+    :@type => 'Spell',
     :@prod_cost => 0,
     :@supply_cost => 2
   },

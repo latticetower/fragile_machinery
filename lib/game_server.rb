@@ -40,7 +40,9 @@ class GameServer
     g.on_game_start(user_id1, user_id2) do |player1, player2|
       puts "game started"
       @users[user_id1].player = player1
+      @users[user_id1].start_game
       @users[user_id2].player = player2
+      @users[user_id2].start_game
     end
     g.on_game_end do
       puts "game ended"
@@ -59,6 +61,7 @@ class GameServer
     #.map{|game| game.set_ready!}
     #TODO: should add method to game to return users
   end
+  
   def game_reject(user1, user2)
     @games.delete_if{ |game| game.played_by_users?(user1, user2) }
   end
