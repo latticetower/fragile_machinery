@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+﻿#!/usr/bin/env ruby
 #
 # server_1
 require 'json'
@@ -56,6 +56,13 @@ class EMGameServer
     message = {'type' => 'info', 'user_id' => @user_id}.to_json
     connection.send message
     
+    # send user list to newly connected user
+    user_list_with_params =  {
+      'data' => @@game_server.user_list(:hash),
+      'type' => 'user_list'
+    }.to_json
+    connection.send user_list_with_params
+    
   end
   
   def subscribe
@@ -68,12 +75,20 @@ class EMGameServer
     EMGameServer.user_list_channel.unsubscribe(@users_sid)
   end
   
-  def self.send_user_list_to_all
+  @user_list_changed_flag = false
+  def self.send_user_list_to_all(arg = :actual_call)
+    if arg == :data_changed
+      @user_list_changed_flag = true
+      return 
+    end
+    return unless @user_list_changed_flag
+    
     user_list_with_params =  {
-      'data' => @@game_server.user_list(:json),
+      'data' => @@game_server.user_list(:hash),
       'type' => 'user_list'
     }.to_json
     EMGameServer.user_list_channel.push user_list_with_params
+    @user_list_changed_flag = true
   end
 
   def post_init
@@ -110,13 +125,15 @@ class EMGameServer
       when /u list/i
         puts "in ulist handler"
         send_user_list
-      when /u rename [A-Za-z0-9]+/
+      when /u rename [A-Za-zА-Яа-я0-9]+/
         puts "renaming"
-        name = msg.sub("u rename ", "").sub(/[^A-Za-z0-9]/, '')
+        name = msg.sub("u rename ", "").gsub(/[^A-Za-z0-9А-Яа-я]/, '')
+        puts msg + ' - ' + name
         rename_user(name) if name.size > 0
       when /m /
         puts "broadcast message"
-        EMGameServer.chat_channel.push EMGameServer.get_chat_message(msg.sub("m ", "#{@name}: "))
+        message = msg.sub("m ", "").gsub(/[<>"']/, '')
+        EMGameServer.chat_channel.push EMGameServer.get_chat_message("#{@name}: #{message}") if message.size > 0
       #game commands
       when /g with user_[0-9]+/i
         user_id2 = msg.sub("g with ", "").gsub(/[^A-Za-z0-9_]/, '').strip
@@ -191,12 +208,15 @@ class EMGameServer
   def rename_user(name)
     @@game_server.rename(@user_id, name)
     @name = name
+    EMGameServer.send_user_list_to_all(:data_changed)
   end
   
   def send_game_request(user_id2)
     return unless @@connections.has_key? user_id2
     @@game_server.create_game(@user_id, user_id2)
-    @@connections[user_id2].send EMGameServer.get_chat_message("#{user_id} requested game " + 
+    message = {'type' => 'invite', 'name' => @name, 'user_id' => user_id}.to_json
+    @@connections[user_id2].send message
+    EMGameServer.get_chat_message("#{user_id} requested game " + 
         "<a href='#' onclick='sendAccept(\"#{user_id}\")'>accept</a>" + 
         " or <a href='#' onclick='sendDecline(\"#{user_id}\")'>decline</a>")
     # TODO: need to send json request

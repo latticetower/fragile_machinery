@@ -29,6 +29,8 @@ class GameServer
     case format
     when :json
       @users.to_json
+    when :hash
+      @users.to_json #TODO: fix this
     else
       @users.values.map{|user| user.name }.join ','
     end

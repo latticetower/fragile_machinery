@@ -55,6 +55,14 @@ function onMessage(evt) {
   else if (obj.type == 'hand') {
     redrawHand(obj.data);
   }
+  else if (obj.type == 'invite') {
+    if (obj.user_id) {
+      msg = "Игрок " + obj.name + " запросил игру, <a href='#' onclick='sendAccept(\"" + obj.user_id + "\")'>принять</a>" + 
+          " или <a href='#' onclick='sendDecline(\"" + obj.user_id + "\")'>отказать</a>?";
+      
+      onNewChatMessage(msg, "color: blue;");
+    }    
+  }
   
   else if (obj.type == 'info') {
     if (obj.user_id)
@@ -103,6 +111,9 @@ function sendGetMyHand() {
   doSend("g hand " + user_id);
 }
 
-function onNewChatMessage(data) {
-  writeToScreen('<span style="color: black;">' + data+'</span>'); 
+function onNewChatMessage(data, style) {
+  if (style == "")
+    writeToScreen('<span style="color: black;">' + data + '</span>'); 
+  else 
+      writeToScreen('<span style="' + style + '">' + data + '</span>'); 
 }

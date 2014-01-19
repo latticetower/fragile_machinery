@@ -18,7 +18,7 @@ begin
         puts "Someone opened WebSocket connection"
         @@clients[ws] = EMGameServer.new(ws)
         @@clients[ws].subscribe
-        EMGameServer.send_user_list_to_all 
+        EMGameServer.send_user_list_to_all(:data_changed) 
         # Publish message to the client
        
        
@@ -29,7 +29,7 @@ begin
         @@clients[ws].unsubscribe
         @@clients[ws].disconnect
         @@clients.delete(ws)
-        EMGameServer.send_user_list_to_all 
+        EMGameServer.send_user_list_to_all(:data_changed) 
       }
 
       ws.onmessage { |msg|
@@ -37,8 +37,8 @@ begin
         @@clients[ws].process_message(msg)
       }
     end
-    EM::add_periodic_timer(5) {
-      # EMGameServer.send_user_list_to_all 
+    EM::add_periodic_timer(15) {
+      EMGameServer.send_user_list_to_all 
     }
   }
 rescue Exception => e
