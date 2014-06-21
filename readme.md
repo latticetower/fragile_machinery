@@ -14,8 +14,20 @@ Currently app is build on top of ruby 1.9.3 and rubygems (although all packets a
 
 After installing bundler, simply run command
 
+```
 bundle install
+```
+This command will install all dependencies.
 
+After it, run this command to start server in attached mode:
+```
+ruby websocket_chat_server.rb
+```
+If you want to start server in detached mode (detached mode works only in linux-based systems), run this instead:
+```
+ruby demonized_server.rb
+```
+Now you can open url http://0.0.0.0:8080 in your webkit-based browser and see what it looks like.
 
 Additional information
 ----------------------
